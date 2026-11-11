@@ -66,7 +66,7 @@
 
   // ---------- header, tiles, written read ----------
   function renderMeta() {
-    $('meta').innerHTML = `Options as of <b>${D.asof}</b> ET (delayed)<br>${D.rows.length} names · ${D.excluded.length} not covered · ${D.snapshots} snapshot${D.snapshots === 1 ? '' : 's'} banked`;
+    $('meta').innerHTML = `Options as of <b>${D.asof}</b> UTC (about 15 min delayed)<br>${D.rows.length} names · ${D.excluded.length} not covered · ${D.snapshots} snapshot${D.snapshots === 1 ? '' : 's'} banked`;
   }
   function renderTiles() {
     const sec = D.sectors, trusted = sec.filter((s) => s.trusted);
