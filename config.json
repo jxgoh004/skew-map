@@ -1,0 +1,38 @@
+{
+  "_comment": "The seven decisions. Change them deliberately, then leave them alone - a moved dial makes old snapshots incomparable.",
+  "delta": 0.25,
+  "expiry": { "rule": "standard monthly (3rd Friday)", "min_dte": 25, "max_dte": 60 },
+  "normalize": "skew = (put IV - call IV) / ATM IV for ranking names; raw vol points for comparing sectors",
+  "quality": { "min_strikes_per_side": 3, "min_expiry_open_interest": 500, "max_leg_spread_pct": 60 },
+  "sanity_ceiling_abs_skew": 0.6,
+  "agreement_threshold": 0.65,
+  "min_names_per_sector": 6,
+  "rvol": { "heavy": 1.5, "light": 0.7 },
+  "crosshair": "zero",
+  "change_lookback_days": 5,
+
+  "watchlist": ["NVDA", "AMD", "MU", "AVGO", "TSM", "PLTR", "CRWD", "SNOW", "NET", "SHOP", "COIN", "TSLA", "HOOD", "UBER", "SOFI"],
+
+  "indices": ["SPY", "QQQ", "IWM"],
+
+  "_benchmark_comment": "Neutral sector benchmark: the largest holdings of each SPDR sector ETF. Deliberately NOT the watchlist.",
+  "benchmark": {
+    "Technology": ["AAPL", "MSFT", "NVDA", "AVGO", "ORCL", "CRM", "AMD", "CSCO", "ADBE", "QCOM", "TXN", "INTC"],
+    "Communication": ["GOOGL", "META", "NFLX", "DIS", "T", "VZ", "CMCSA", "TMUS", "EA", "TTWO", "WBD", "CHTR"],
+    "Cons. Discretionary": ["AMZN", "TSLA", "HD", "MCD", "NKE", "LOW", "SBUX", "TJX", "BKNG", "CMG", "GM", "F"],
+    "Cons. Staples": ["PG", "KO", "PEP", "COST", "WMT", "PM", "MO", "MDLZ", "CL", "TGT", "KMB", "GIS"],
+    "Energy": ["XOM", "CVX", "COP", "SLB", "EOG", "MPC", "PSX", "VLO", "OXY", "WMB", "KMI", "HAL"],
+    "Financials": ["JPM", "BAC", "WFC", "GS", "MS", "C", "BLK", "AXP", "SCHW", "V", "MA", "BRK.B"],
+    "Health Care": ["LLY", "UNH", "JNJ", "ABBV", "MRK", "PFE", "TMO", "ABT", "AMGN", "BMY", "GILD", "CVS"],
+    "Industrials": ["GE", "CAT", "RTX", "UNP", "HON", "BA", "DE", "LMT", "UPS", "FDX", "ETN", "MMM"],
+    "Materials": ["LIN", "SHW", "FCX", "NEM", "APD", "ECL", "DOW", "DD", "NUE", "CTVA", "MLM", "VMC"],
+    "Real Estate": ["PLD", "AMT", "EQIX", "WELL", "SPG", "PSA", "O", "CCI", "DLR", "CBRE", "EXR", "AVB"],
+    "Utilities": ["NEE", "SO", "DUK", "CEG", "AEP", "SRE", "D", "EXC", "XEL", "PEG", "ED", "VST"]
+  },
+
+  "watchlist_sectors": {
+    "MU": "Technology", "TSM": "Technology", "PLTR": "Technology", "CRWD": "Technology", "SNOW": "Technology",
+    "NET": "Technology", "SHOP": "Technology", "COIN": "Financials", "HOOD": "Financials", "SOFI": "Financials",
+    "UBER": "Industrials"
+  }
+}

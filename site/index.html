@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skew Map</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>Skew Map</h1>
+    <p class="sub">What options traders are paying for, crossed with what the stock actually did.</p>
+  </div>
+  <div class="meta" id="meta"></div>
+</header>
+
+<p class="disclaimer">Educational research layer only — it shows <em>where to look</em>, not what to buy or when. Not financial advice. Data is free, delayed and unofficial; verify against your broker's chain before acting on any number.</p>
+
+<main>
+  <section class="tiles" id="tiles" aria-label="Headline readings"></section>
+
+  <section class="card">
+    <h2>Today's read</h2>
+    <p class="hint">Generated from the numbers by fixed rules, so a quiet day reads quiet.</p>
+    <ul class="read" id="read"></ul>
+  </section>
+
+  <div class="filters" id="filters" role="group" aria-label="Filters">
+    <label>Sector <select id="f-sector"></select></label>
+    <label>Names <select id="f-set">
+      <option value="all">All covered</option>
+      <option value="watch">Watchlist only</option>
+      <option value="bench">Benchmark only</option>
+    </select></label>
+    <label class="chk"><input type="checkbox" id="f-thin" checked> Show thin chains</label>
+    <span class="count" id="f-count"></span>
+  </div>
+
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <h2>The map</h2>
+        <p class="hint">Each dot is a stock. Right = up over the period. Up = puts cost more than calls (protection bid); below the line = calls cost more (upside bid).</p>
+      </div>
+      <div class="seg" id="horizon" role="group" aria-label="Return horizon">
+        <button data-h="r1d">1D</button><button data-h="r1w">1W</button><button data-h="r1m" class="on">1M</button>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i class="dot watch"></i>Watchlist</span>
+      <span><i class="dot"></i>Benchmark</span>
+      <span><i class="dot thin"></i>Thin chain — don't act on it</span>
+      <span><i class="dot idx"></i>Index ETF</span>
+    </div>
+    <div class="plot" id="map"></div>
+    <p class="hint" id="map-note"></p>
+  </section>
+
+  <section class="card">
+    <h2>The four verdicts</h2>
+    <p class="hint">Decided once, in advance. The verdict is always anchored to the 1-month clock, whatever lens the map is on.</p>
+    <div class="quads" id="quads"></div>
+  </section>
+
+  <section class="card">
+    <h2>Fear premium by sector</h2>
+    <p class="hint">Raw volatility points (25-delta put IV − call IV), averaged over each sector's benchmark names — not the normalized figure, which flatters low-volatility sectors. Longer bar = puts pricier. Dashed lines are the index ETFs.</p>
+    <div class="plot" id="sectors"></div>
+  </section>
+
+  <section class="card">
+    <h2>Sector grid</h2>
+    <p class="hint">Benchmark names per sector, coloured by which side is bid, sized by dollars traded. Check whether a sector leans together before quoting its average.</p>
+    <div class="legend"><span><i class="sw calls"></i>Calls bid</span><span><i class="sw mid"></i>Balanced</span><span><i class="sw puts"></i>Puts bid</span></div>
+    <div id="grid"></div>
+  </section>
+
+  <section class="card">
+    <h2>Shortlist</h2>
+    <p class="hint">Names standing apart from their own sector. Same evidence, different verdict depending on where price already is. A shortlist is not a trade — each still needs a chart, a level and a risk plan.</p>
+    <div class="two">
+      <div><h3>Upside bid vs. sector peers</h3><div id="short-bull"></div></div>
+      <div><h3>Caution flags — rallies being insured</h3><div id="short-hedge"></div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Full board</h2>
+    <p class="hint">Click a column to sort. Click a row for its sentence.</p>
+    <div class="tablewrap"><table id="board"></table></div>
+  </section>
+
+  <section class="card two">
+    <div>
+      <h2>Not covered today</h2>
+      <p class="hint">Names that failed a chain check are listed, not silently dropped.</p>
+      <ul class="plain" id="excluded"></ul>
+    </div>
+    <div>
+      <h2>Settings in force</h2>
+      <p class="hint">Edit <code>config.json</code>, deliberately and rarely.</p>
+      <dl class="settings" id="settings"></dl>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>How this is made</h2>
+    <ul class="plain">
+      <li><strong>Skew</strong> = (25-delta put IV − 25-delta call IV) ÷ at-the-money IV, on the standard monthly expiry 25–60 days out. Positive means protection is bid; negative means upside is bid.</li>
+      <li><strong>Options data:</strong> Cboe delayed quotes (per-contract implied volatility and delta, about 15 minutes delayed). <strong>Prices, volume, earnings dates:</strong> Yahoo Finance. Both are free and unofficial, with no uptime guarantee.</li>
+      <li><strong>Sector rank</strong> compares a name only with its own sector group. <strong>Δ skew</strong> compares with the snapshot at least five days older, and stays blank until that history exists — the level is structural, the change is the signal.</li>
+      <li><strong>Index put/call ratios are deliberately not shown</strong>: they depend almost entirely on which strikes are counted.</li>
+      <li><strong>Earnings inside the expiry</strong> are flagged <span class="tag ev">EVT</span> — elevated IV there is event premium, not sentiment.</li>
+      <li>Relative volume compares the latest session with its 20-day average; a run before the close understates it.</li>
+    </ul>
+  </section>
+</main>
+
+<div id="tip" role="tooltip" hidden></div>
+<script src="data/latest.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

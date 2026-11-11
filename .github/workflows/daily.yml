@@ -1,0 +1,41 @@
+# Optional, free: refreshes the data every weekday after the US close and publishes site/ to GitHub Pages.
+# Free on a public repo (unlimited Actions minutes); a private repo uses ~3 of the 2,000 free minutes per run.
+name: Daily skew map
+on:
+  schedule:
+    - cron: "30 21 * * 1-5"   # 21:30 UTC = after the 16:00 ET close year-round
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths-ignore: ["site/data/**", "README.md"]
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency: { group: skew-map, cancel-in-progress: true }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: { name: github-pages, url: "${{ steps.deploy.outputs.page_url }}" }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: pip }
+      - run: pip install -r requirements.txt
+      - id: data
+        run: python build_data.py
+        continue-on-error: true   # if the free feeds fail, still publish the last good board
+      - name: Bank the snapshot (history is what makes the change columns work)
+        run: |
+          git config user.name "skew-map-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add site/data
+          git diff --cached --quiet || git commit -m "Snapshot $(date -u +%F)"
+          git pull --rebase origin main && git push
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: site }
+      - id: deploy
+        uses: actions/deploy-pages@v4
+      - name: Fail the run if the data refresh failed
+        if: steps.data.outcome == 'failure'
+        run: exit 1
